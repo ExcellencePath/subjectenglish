@@ -180,11 +180,36 @@ tr:hover td { background:#f8fefe; }
 .btn-del { background:#fff0f0; border:1px solid #f0c0c0; color:#e74c3c; cursor:pointer; font-size:14px; border-radius:8px; padding:4px 10px; transition:all 0.2s; font-weight:700; }
 .btn-del:hover { color:var(--wrong); }
 
-@media(max-width:600px) {
-  .topbar h1 { font-size:16px; }
-  th:nth-child(4), td:nth-child(4),
-  th:nth-child(5), td:nth-child(5) { display:none; }
-  .stats-grid { grid-template-columns:1fr 1fr; }
+@media(max-width:768px) {
+  .topbar h1 { font-size:15px; }
+  .topbar-right { gap:6px; }
+  .btn-refresh { padding:6px 10px; font-size:12px; }
+  .content { padding:12px; }
+  .stats-grid { grid-template-columns:1fr 1fr; gap:10px; }
+  .stat-num { font-size:24px; }
+  .filters { gap:6px; }
+  .filter-btn { padding:6px 12px; font-size:12px; }
+  .search-inp { min-width:140px; font-size:12px; }
+  
+  /* Show only essential columns on mobile */
+  table { font-size:12px; }
+  th, td { padding:8px 6px; }
+  
+  /* Hide less important columns on small screens */
+  th:nth-child(5), td:nth-child(5),
+  th:nth-child(6), td:nth-child(6),
+  th:nth-child(7), td:nth-child(7) { display:none; }
+  th:nth-child(1), td:nth-child(1) { display:none; }
+  
+  /* Make score badge wrap nicely */
+  .badge { font-size:11px; padding:3px 6px; display:block; text-align:center; }
+  .unit-tag { font-size:10px; }
+  
+  /* Progress bar smaller */
+  .prog-bar-wrap { width:50px; }
+  
+  /* Table scrollable */
+  .table-wrap { overflow-x:auto; }
 }
 
 </style>
@@ -659,7 +684,7 @@ function renderTable() {
   }
 
   var html = '<table><thead><tr>' +
-    '<th>#</th><th>Student Name</th><th>Unit</th><th>Score</th><th>Progress</th><th>Date</th><th>Time</th><th></th>' +
+    '<th>#</th><th>Student Name</th><th>Score %</th><th>✓/✗</th><th>Unit</th><th>Date</th><th>Time</th><th></th>' +
     '</tr></thead><tbody>';
 
   for (var i=0; i<filtered.length; i++) {
@@ -673,10 +698,9 @@ function renderTable() {
     html += '<tr>';
     html += '<td style="color:#aaa;font-size:12px;">' + (i+1) + '</td>';
     html += '<td style="font-weight:800;">' + (r.name || "—") + '</td>';
+    html += '<td><span class="badge ' + badgeClass + '">' + pct + '%</span></td>';
+    html += '<td style="font-weight:800;color:#2a9d9d;">' + (r.correct||0) + '/' + (r.total||10) + '</td>';
     html += '<td><span class="unit-tag">' + (r.unit || "—") + '</span></td>';
-    html += '<td><span class="badge ' + badgeClass + '">' + pct + '% — ' + badgeText + '</span></td>';
-    html += '<td>' + (r.correct||0) + '/' + (r.total||10) +
-            '<span class="prog-bar-wrap"><span class="prog-bar" style="width:' + progWidth + '%;"></span></span></td>';
     html += '<td style="color:#aaa;font-size:12px;">' + (r.date || "—") + '</td>';
     html += '<td style="color:#aaa;font-size:12px;">' + (r.time || "—") + '</td>';
     html += '<td><button class="btn-del" onclick="deleteResult(' + r.id + ')">🗑</button></td>';
@@ -1040,7 +1064,7 @@ function renderTable() {
   }
 
   var html = '<table><thead><tr>' +
-    '<th>#</th><th>Student Name</th><th>Unit</th><th>Score</th><th>Progress</th><th>Date</th><th>Time</th><th></th>' +
+    '<th>#</th><th>Student Name</th><th>Score %</th><th>✓/✗</th><th>Unit</th><th>Date</th><th>Time</th><th></th>' +
     '</tr></thead><tbody>';
 
   for (var i=0; i<filtered.length; i++) {
@@ -1054,10 +1078,9 @@ function renderTable() {
     html += '<tr>';
     html += '<td style="color:#aaa;font-size:12px;">' + (i+1) + '</td>';
     html += '<td style="font-weight:800;">' + (r.name || "—") + '</td>';
+    html += '<td><span class="badge ' + badgeClass + '">' + pct + '%</span></td>';
+    html += '<td style="font-weight:800;color:#2a9d9d;">' + (r.correct||0) + '/' + (r.total||10) + '</td>';
     html += '<td><span class="unit-tag">' + (r.unit || "—") + '</span></td>';
-    html += '<td><span class="badge ' + badgeClass + '">' + pct + '% — ' + badgeText + '</span></td>';
-    html += '<td>' + (r.correct||0) + '/' + (r.total||10) +
-            '<span class="prog-bar-wrap"><span class="prog-bar" style="width:' + progWidth + '%;"></span></span></td>';
     html += '<td style="color:#aaa;font-size:12px;">' + (r.date || "—") + '</td>';
     html += '<td style="color:#aaa;font-size:12px;">' + (r.time || "—") + '</td>';
     html += '<td><button class="btn-del" onclick="deleteResult(' + r.id + ')">🗑</button></td>';
