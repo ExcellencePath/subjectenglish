@@ -520,7 +520,7 @@ function saveResult(correct, wrong, total, pct) {
     <div class="table-wrap">
       <div class="table-head">
         <h2>📋 Student Results</h2>
-        <span class="results-count" id="results-count"></span>
+        <span class="results-count" id="results-count"></span><button onclick="deleteAll()" style="padding:6px 14px;background:#fff0f0;color:#e74c3c;border:1px solid #f0c0c0;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin-left:10px;">🗑 Delete All</button>
       </div>
       <div id="table-container"><div class="loading">⏳ Loading results...</div></div>
     </div>
@@ -574,6 +574,34 @@ document.getElementById("search-inp").addEventListener("input", function() {
 });
 
 // LOAD DATA
+
+
+function deleteAll() {
+  if (!confirm("Delete ALL results? This cannot be undone!")) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open("DELETE", SUPA_URL + "/rest/v1/results?id=gt.0", true);
+  xhr.setRequestHeader("apikey", SUPA_KEY);
+  xhr.setRequestHeader("Authorization", "Bearer " + SUPA_KEY);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) { loadResults(); }
+  };
+  xhr.send();
+}
+
+function deleteResult(id) {
+  if (!confirm("Delete this result?")) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open("DELETE", SUPA_URL + "/rest/v1/results?id=eq." + id, true);
+  xhr.setRequestHeader("apikey", SUPA_KEY);
+  xhr.setRequestHeader("Authorization", "Bearer " + SUPA_KEY);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      loadResults();
+    }
+  };
+  xhr.send();
+}
+
 function loadResults() {
   document.getElementById("table-container").innerHTML = '<div class="loading">⏳ Loading results...</div>';
   var xhr = new XMLHttpRequest();
@@ -631,7 +659,7 @@ function renderTable() {
   }
 
   var html = '<table><thead><tr>' +
-    '<th>#</th><th>Student Name</th><th>Unit</th><th>Score</th><th>Progress</th><th>Date</th><th>Time</th>' +
+    '<th>#</th><th>Student Name</th><th>Unit</th><th>Score</th><th>Progress</th><th>Date</th><th>Time</th><th></th>' +
     '</tr></thead><tbody>';
 
   for (var i=0; i<filtered.length; i++) {
@@ -651,6 +679,7 @@ function renderTable() {
             '<span class="prog-bar-wrap"><span class="prog-bar" style="width:' + progWidth + '%;"></span></span></td>';
     html += '<td style="color:#aaa;font-size:12px;">' + (r.date || "—") + '</td>';
     html += '<td style="color:#aaa;font-size:12px;">' + (r.time || "—") + '</td>';
+    html += '<td><button class="btn-del" onclick="deleteResult(' + r.id + ')">🗑</button></td>';
     html += '</tr>';
   }
   html += '</tbody></table>';
@@ -926,6 +955,34 @@ document.getElementById("search-inp").addEventListener("input", function() {
 });
 
 // LOAD DATA
+
+
+function deleteAll() {
+  if (!confirm("Delete ALL results? This cannot be undone!")) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open("DELETE", SUPA_URL + "/rest/v1/results?id=gt.0", true);
+  xhr.setRequestHeader("apikey", SUPA_KEY);
+  xhr.setRequestHeader("Authorization", "Bearer " + SUPA_KEY);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) { loadResults(); }
+  };
+  xhr.send();
+}
+
+function deleteResult(id) {
+  if (!confirm("Delete this result?")) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open("DELETE", SUPA_URL + "/rest/v1/results?id=eq." + id, true);
+  xhr.setRequestHeader("apikey", SUPA_KEY);
+  xhr.setRequestHeader("Authorization", "Bearer " + SUPA_KEY);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      loadResults();
+    }
+  };
+  xhr.send();
+}
+
 function loadResults() {
   document.getElementById("table-container").innerHTML = '<div class="loading">⏳ Loading results...</div>';
   var xhr = new XMLHttpRequest();
@@ -983,7 +1040,7 @@ function renderTable() {
   }
 
   var html = '<table><thead><tr>' +
-    '<th>#</th><th>Student Name</th><th>Unit</th><th>Score</th><th>Progress</th><th>Date</th><th>Time</th>' +
+    '<th>#</th><th>Student Name</th><th>Unit</th><th>Score</th><th>Progress</th><th>Date</th><th>Time</th><th></th>' +
     '</tr></thead><tbody>';
 
   for (var i=0; i<filtered.length; i++) {
@@ -1003,6 +1060,7 @@ function renderTable() {
             '<span class="prog-bar-wrap"><span class="prog-bar" style="width:' + progWidth + '%;"></span></span></td>';
     html += '<td style="color:#aaa;font-size:12px;">' + (r.date || "—") + '</td>';
     html += '<td style="color:#aaa;font-size:12px;">' + (r.time || "—") + '</td>';
+    html += '<td><button class="btn-del" onclick="deleteResult(' + r.id + ')">🗑</button></td>';
     html += '</tr>';
   }
   html += '</tbody></table>';
